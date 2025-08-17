@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: ApiGateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: admin-service
+              uri: https://admin-service-backend.dev.sgaurav.me
+              predicates:
+                - Path=/api/v1/admin-service/**
+              filters:
+                - RewritePath=/api/v1/admin-service/(?<segment>.*), /api/admin-service/${segment}
+server:
+  port: 7779
+  host: 0.0.0.0
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
