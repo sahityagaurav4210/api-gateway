@@ -112,4 +112,14 @@ pipeline{
             }
         }
     }
+
+    post {
+        success {
+            echo "${env.BRANCH_NAME.toUpperCase()} branch is live now"
+        }
+
+        failure {
+            echo 'Admin service gateway pipeline has failed'
+        }
+    }
 }
