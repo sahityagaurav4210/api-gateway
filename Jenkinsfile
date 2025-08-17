@@ -8,28 +8,75 @@ pipeline{
     }
 
     stages{
-        stage("Cloning the code...."){
+        stage("Cloner"){
             steps{
-                git credentialsId: 'github-creds', url: 'https://github.com/sahityagaurav4210/api-gateway.git', branch: 'master'
+                git credentialsId: 'github-creds', url: 'https://github.com/sahityagaurav4210/api-gateway.git', branch: env.BRANCH_NAME
                 echo "Code clone was successful 👍👍👍👍"
             }
         }
 
-        stage("Setting up the deployment environment..."){
+        stage("Configurer"){
             steps{
                 sh "cp /root/deployment-files/admin-service-gateway.yml ./src/main/resources/application-dev.yml"
                 echo "Deployment environment is ready 🚀🚀🚀🚀"
             }
         }
 
-        stage("Building the docker image...."){
+        stage("Cleaner"){
+            when {
+                not {
+                    anyOf {
+                        branch 'master'
+                        branch 'dev'
+                    }
+                }
+            }
+
+            steps{
+                sh "chmod 777 ./mvnw"
+                sh "./mvnw clean"
+                echo "Deployment environment is ready 🚀🚀🚀🚀"
+            }
+        }
+
+        stage("Installer"){
+            when {
+                not {
+                    anyOf {
+                        branch 'master'
+                        branch 'dev'
+                    }
+                }
+            }
+
+            steps{
+                sh "./mvnw install"
+                echo "Deployment environment is ready 🚀🚀🚀🚀"
+            }
+        }
+
+        stage("Builder"){
+            when {
+                anyOf {
+                    branch 'dev'
+                    branch 'master'
+                }
+            }
+
             steps{
                 sh "docker build -t sgauravdev/admin-service-gateway ."
                 echo "Build was successful 👍👍👍👍"
             }
         }
 
-        stage("Pushing the build....."){
+        stage("Pusher"){
+            when {
+                anyOf {
+                    branch 'dev'
+                    branch 'master'
+                }
+            }
+
             steps{
                withCredentials([usernamePassword(credentialsId:"docker-creds",passwordVariable:"dockerCredPwd",usernameVariable:"dockerCredUsr")]){
                     sh "docker login -u ${env.dockerCredUsr} -p ${env.dockerCredPwd}"
@@ -40,7 +87,14 @@ pipeline{
             }
         }
 
-        stage("Deploying the code....."){
+        stage("Deployer"){
+            when {
+                anyOf {
+                    branch 'dev'
+                    branch 'master'
+                }
+            }
+
             steps{
                 withCredentials([usernamePassword(credentialsId:"caprover-creds",passwordVariable:"caproverCredPwd",usernameVariable:"caproverCredUsr")]){
                     withCredentials([usernamePassword(credentialsId:"docker-creds",passwordVariable:"dockerCredPwd",usernameVariable:"dockerCredUsr")]){
