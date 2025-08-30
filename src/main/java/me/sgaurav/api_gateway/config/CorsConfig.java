@@ -15,9 +15,15 @@ public class CorsConfig {
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(false);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://192.168.29.22:5173", "https://admin-service.dev.sgaurav.me")); // Allow all origins
+        config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:5173",
+                "http://192.168.29.22:5173",
+                "http://localhost:5174",
+                "http://192.168.29.22:5174",
+                "https://admin-service.dev.sgaurav.me"
+        ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
+        config.setAllowedHeaders(Arrays.asList("*")); 
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

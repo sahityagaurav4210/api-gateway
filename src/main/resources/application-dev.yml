@@ -12,6 +12,12 @@ spring:
                 - Path=/api/v1/admin-service/**
               filters:
                 - RewritePath=/api/v1/admin-service/(?<segment>.*), /api/admin-service/${segment}
+            - id: ftp-service
+              uri: https://portfolio-ftp.sgaurav.me
+              predicates:
+               - Path=/api/v1/ftp-service/**
+              filters:
+               - RewritePath=/api/v1/ftp-service/(?<segment>.*), /api/ftp-service/${segment}
 server:
   port: 7779
   host: 0.0.0.0
