@@ -20,7 +20,8 @@ public class CorsConfig {
                 "http://192.168.29.22:5173",
                 "http://localhost:5174",
                 "http://192.168.29.22:5174",
-                "https://admin-service.dev.sgaurav.me"
+                "https://admin-service.dev.sgaurav.me",
+                "https://ftp-portal.servers.sgaurav.me"
         ));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*")); 
