@@ -17,6 +17,7 @@ pipeline{
 
         stage("Configurer"){
             steps{
+                sh "mkdir -p ./src/main/resources"
                 sh "cp /root/deployment-files/admin-service-gateway.yml ./src/main/resources/application-dev.yml"
                 echo "Deployment environment is ready 🚀🚀🚀🚀"
             }
